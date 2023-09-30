@@ -1,44 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Admin\AdminAmenityController;
+use App\Http\Controllers\Admin\AdminCustomerController;
+use App\Http\Controllers\Admin\AdminDatewiseRoomController;
+use App\Http\Controllers\Admin\AdminFaqController;
+use App\Http\Controllers\Admin\AdminFeatureController;
+use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminPageController;
+use App\Http\Controllers\Admin\AdminPhotoController;
+use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminRoomController;
+use App\Http\Controllers\Admin\AdminSettingController;
+use App\Http\Controllers\Admin\AdminSlideController;
+use App\Http\Controllers\Admin\AdminSubscriberController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
+use App\Http\Controllers\Admin\AdminVideoController;
+use App\Http\Controllers\Customer\CustomerAuthController;
+use App\Http\Controllers\Customer\CustomerHomeController;
+use App\Http\Controllers\Customer\CustomerOrderController;
+use App\Http\Controllers\Customer\CustomerProfileController;
 use App\Http\Controllers\Front\AboutController;
 use App\Http\Controllers\Front\BlogController;
-use App\Http\Controllers\Front\PhotoController;
-use App\Http\Controllers\Front\VideoController;
-use App\Http\Controllers\Front\FaqController;
-use App\Http\Controllers\Front\TermsController;
-use App\Http\Controllers\Front\PrivacyController;
-use App\Http\Controllers\Front\ContactController;
-use App\Http\Controllers\Front\SubscriberController;
-use App\Http\Controllers\Front\RoomController;
 use App\Http\Controllers\Front\BookingController;
-
-use App\Http\Controllers\Admin\AdminHomeController;
-use App\Http\Controllers\Admin\AdminSettingController;
-use App\Http\Controllers\Admin\AdminCustomerController;
-use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\AdminProfileController;
-use App\Http\Controllers\Admin\AdminSlideController;
-use App\Http\Controllers\Admin\AdminFeatureController;
-use App\Http\Controllers\Admin\AdminTestimonialController;
-use App\Http\Controllers\Admin\AdminPostController;
-use App\Http\Controllers\Admin\AdminPhotoController;
-use App\Http\Controllers\Admin\AdminVideoController;
-use App\Http\Controllers\Admin\AdminFaqController;
-use App\Http\Controllers\Admin\AdminPageController;
-use App\Http\Controllers\Admin\AdminSubscriberController;
-use App\Http\Controllers\Admin\AdminAmenityController;
-use App\Http\Controllers\Admin\AdminRoomController;
-use App\Http\Controllers\Admin\AdminOrderController;
-use App\Http\Controllers\Admin\AdminDatewiseRoomController;
-
-
-use App\Http\Controllers\Customer\CustomerHomeController;
-use App\Http\Controllers\Customer\CustomerAuthController;
-use App\Http\Controllers\Customer\CustomerProfileController;
-use App\Http\Controllers\Customer\CustomerOrderController;
-
+use App\Http\Controllers\Front\ContactController;
+use App\Http\Controllers\Front\FaqController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\PhotoController;
+use App\Http\Controllers\Front\PrivacyController;
+use App\Http\Controllers\Front\RoomController;
+use App\Http\Controllers\Front\SubscriberController;
+use App\Http\Controllers\Front\TermsController;
+use App\Http\Controllers\Front\VideoController;
+use App\Http\Controllers\TestController;
+use Illuminate\Support\Facades\Route;
 
 /* Front */
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -65,7 +62,6 @@ Route::post('/payment', [BookingController::class, 'payment'])->name('payment');
 Route::get('/payment/paypal/{price}', [BookingController::class, 'paypal'])->name('paypal');
 Route::post('/payment/stripe/{price}', [BookingController::class, 'stripe'])->name('stripe');
 
-
 /* Admin */
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin_login');
 Route::post('/admin/login-submit', [AdminLoginController::class, 'login_submit'])->name('admin_login_submit');
@@ -74,8 +70,6 @@ Route::get('/admin/forget-password', [AdminLoginController::class, 'forget_passw
 Route::post('/admin/forget-password-submit', [AdminLoginController::class, 'forget_password_submit'])->name('admin_forget_password_submit');
 Route::get('/admin/reset-password/{token}/{email}', [AdminLoginController::class, 'reset_password'])->name('admin_reset_password');
 Route::post('/admin/reset-password-submit', [AdminLoginController::class, 'reset_password_submit'])->name('admin_reset_password_submit');
-
-
 
 /* Customer */
 Route::get('/login', [CustomerAuthController::class, 'login'])->name('customer_login');
@@ -89,9 +83,8 @@ Route::post('/forget-password-submit', [CustomerAuthController::class, 'forget_p
 Route::get('/reset-password/{token}/{email}', [CustomerAuthController::class, 'reset_password'])->name('customer_reset_password');
 Route::post('/reset-password-submit', [CustomerAuthController::class, 'reset_password_submit'])->name('customer_reset_password_submit');
 
-
 /* Customer - Middleware */
-Route::group(['middleware' =>['customer:customer']], function(){
+Route::group(['middleware' => ['customer:customer']], function () {
     Route::get('/customer/home', [CustomerHomeController::class, 'index'])->name('customer_home');
     Route::get('/customer/edit-profile', [CustomerProfileController::class, 'index'])->name('customer_profile');
     Route::post('/customer/edit-profile-submit', [CustomerProfileController::class, 'profile_submit'])->name('customer_profile_submit');
@@ -99,9 +92,8 @@ Route::group(['middleware' =>['customer:customer']], function(){
     Route::get('/customer/invoice/{id}', [CustomerOrderController::class, 'invoice'])->name('customer_invoice');
 });
 
-
 /* Admin - Middleware */
-Route::group(['middleware' =>['admin:admin']], function(){
+Route::group(['middleware' => ['admin:admin']], function () {
     Route::get('/admin/edit-profile', [AdminProfileController::class, 'index'])->name('admin_profile');
     Route::post('/admin/edit-profile-submit', [AdminProfileController::class, 'profile_submit'])->name('admin_profile_submit');
 
@@ -154,7 +146,6 @@ Route::group(['middleware' =>['admin:admin']], function(){
     Route::post('/admin/photo/update/{id}', [AdminPhotoController::class, 'update'])->name('admin_photo_update');
     Route::get('/admin/photo/delete/{id}', [AdminPhotoController::class, 'delete'])->name('admin_photo_delete');
 
-
     Route::get('/admin/video/view', [AdminVideoController::class, 'index'])->name('admin_video_view');
     Route::get('/admin/video/add', [AdminVideoController::class, 'add'])->name('admin_video_add');
     Route::post('/admin/video/store', [AdminVideoController::class, 'store'])->name('admin_video_store');
@@ -162,14 +153,12 @@ Route::group(['middleware' =>['admin:admin']], function(){
     Route::post('/admin/video/update/{id}', [AdminVideoController::class, 'update'])->name('admin_video_update');
     Route::get('/admin/video/delete/{id}', [AdminVideoController::class, 'delete'])->name('admin_video_delete');
 
-
     Route::get('/admin/faq/view', [AdminFaqController::class, 'index'])->name('admin_faq_view');
     Route::get('/admin/faq/add', [AdminFaqController::class, 'add'])->name('admin_faq_add');
     Route::post('/admin/faq/store', [AdminFaqController::class, 'store'])->name('admin_faq_store');
     Route::get('/admin/faq/edit/{id}', [AdminFaqController::class, 'edit'])->name('admin_faq_edit');
     Route::post('/admin/faq/update/{id}', [AdminFaqController::class, 'update'])->name('admin_faq_update');
     Route::get('/admin/faq/delete/{id}', [AdminFaqController::class, 'delete'])->name('admin_faq_delete');
-
 
     Route::get('/admin/page/about', [AdminPageController::class, 'about'])->name('admin_page_about');
     Route::post('/admin/page/about/update', [AdminPageController::class, 'about_update'])->name('admin_page_about_update');
@@ -219,11 +208,9 @@ Route::group(['middleware' =>['admin:admin']], function(){
     Route::get('/admin/page/reset_password', [AdminPageController::class, 'reset_password'])->name('admin_page_reset_password');
     Route::post('/admin/page/reset_password/update', [AdminPageController::class, 'reset_password_update'])->name('admin_page_reset_password_update');
 
-
     Route::get('/admin/subscriber/show', [AdminSubscriberController::class, 'show'])->name('admin_subscriber_show');
     Route::get('/admin/subscriber/send-email', [AdminSubscriberController::class, 'send_email'])->name('admin_subscriber_send_email');
     Route::post('/admin/subscriber/send-email-submit', [AdminSubscriberController::class, 'send_email_submit'])->name('admin_subscriber_send_email_submit');
-
 
     Route::get('/admin/amenity/view', [AdminAmenityController::class, 'index'])->name('admin_amenity_view');
     Route::get('/admin/amenity/add', [AdminAmenityController::class, 'add'])->name('admin_amenity_add');
@@ -231,7 +218,6 @@ Route::group(['middleware' =>['admin:admin']], function(){
     Route::get('/admin/amenity/edit/{id}', [AdminAmenityController::class, 'edit'])->name('admin_amenity_edit');
     Route::post('/admin/amenity/update/{id}', [AdminAmenityController::class, 'update'])->name('admin_amenity_update');
     Route::get('/admin/amenity/delete/{id}', [AdminAmenityController::class, 'delete'])->name('admin_amenity_delete');
-
 
     Route::get('/admin/room/view', [AdminRoomController::class, 'index'])->name('admin_room_view');
     Route::get('/admin/room/add', [AdminRoomController::class, 'add'])->name('admin_room_add');
@@ -245,3 +231,5 @@ Route::group(['middleware' =>['admin:admin']], function(){
     Route::get('/admin/room/gallery/delete/{id}', [AdminRoomController::class, 'gallery_delete'])->name('admin_room_gallery_delete');
 });
 
+Route::get('/testEmail', [TestController::class, 'testEmail']);
+Route::get('/testSms', [TestController::class, 'testSms']);
